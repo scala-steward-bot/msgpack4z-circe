@@ -41,7 +41,7 @@ val scala212 = "2.12.21"
 
 val commonSettings = Def.settings(
   ReleasePlugin.extraReleaseCommands,
-  publishTo := sonatypePublishToBundle.value,
+  publishTo := (if (isSnapshot.value) None else localStaging.value),
   commands += Command.command("updateReadme")(UpdateReadme.updateReadmeTask),
   releaseTagName := tagName.value,
   releaseProcess := Seq[ReleaseStep](
@@ -60,7 +60,7 @@ val commonSettings = Def.settings(
       },
       enableCrossBuild = true
     ),
-    releaseStepCommand("sonatypeBundleRelease"),
+    releaseStepCommand("sonaRelease"),
     setNextVersion,
     commitNextVersion,
     UpdateReadme.updateReadmeProcess,
